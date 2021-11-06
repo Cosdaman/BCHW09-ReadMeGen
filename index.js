@@ -1,6 +1,7 @@
 //required packages
 const inquirer = require('inquirer');
 const fs = require('fs');
+let folderName = "output"
 
 //question array
 const questions = [
@@ -53,9 +54,23 @@ const questions = [
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
+    console.log(data)
+    let contents = "";
+    for (const key in data) {
+        console.log(key)
+        console.log(data[key])
+
+    }
+    try {
+        if (!fs.existsSync(folderName)) {
+            fs.mkdirSync(folderName)
+        }
+    } catch (err) {
+        console.error(err)
+    }
     fs.writeFile(
-        `${fileName}.md`,
-        `${data}\n`,
+        `./${folderName}/${fileName}.md`,
+        JSON.stringify(contents),
         (err) => err ? console.error(err) : console.log('Commit logged!')
     );
 }
@@ -64,8 +79,7 @@ function writeToFile(fileName, data) {
 function init() {
     inquirer.prompt(questions)
         .then((response) => {
-            console.log(response)
-            writeToFile(response.title, "")
+            writeToFile(response.title, response)
         })
         .catch((error) => {
             if (error.isTtyError) {
