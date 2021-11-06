@@ -66,7 +66,7 @@ function writeToFile(fileName, data) {
     }
     for (const key in data) {
         if (key == "title") {
-            contents += `# ${data[key]}  \n`
+            contents += `# ${data[key].toUpperCase()}  \n`
         } else {
             contents += `## ${key.toUpperCase()}  \n ${data[key]}  \n\n`
         }
