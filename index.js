@@ -10,31 +10,31 @@ const questions = [
         message: 'What is your project title?',
         name: 'title',
     },
-    // {
-    //     type: 'input',
-    //     message: 'What is your project description?',
-    //     name: 'description',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'What are the installation instructions?',
-    //     name: 'install',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'What about usage information?',
-    //     name: 'usage',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'How about contribution guidelines?',
-    //     name: 'contribution',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'Are there any test instructions?',
-    //     name: 'test',
-    // },
+    {
+        type: 'input',
+        message: 'What is your project description?',
+        name: 'description',
+    },
+    {
+        type: 'input',
+        message: 'What are the installation instructions?',
+        name: 'installation',
+    },
+    {
+        type: 'input',
+        message: 'What about usage information?',
+        name: 'usage',
+    },
+    {
+        type: 'input',
+        message: 'How about contribution guidelines?',
+        name: 'contributing',
+    },
+    {
+        type: 'input',
+        message: 'Are there any test instructions?',
+        name: 'tests',
+    },
     // {
     //     type: 'input',
     //     message: 'Please choose a license from the following options: ',
@@ -52,15 +52,11 @@ const questions = [
     // },
 ];
 
-// TODO: Create a function to write README file
+//create readme
 function writeToFile(fileName, data) {
     console.log(data)
     let contents = "";
-    for (const key in data) {
-        console.log(key)
-        console.log(data[key])
-
-    }
+    //output directory
     try {
         if (!fs.existsSync(folderName)) {
             fs.mkdirSync(folderName)
@@ -68,14 +64,21 @@ function writeToFile(fileName, data) {
     } catch (err) {
         console.error(err)
     }
+    for (const key in data) {
+        if (key == "title") {
+            contents += `# ${data[key]}  \n`
+        } else {
+            contents += `## ${key.toUpperCase()}  \n ${data[key]}  \n\n`
+        }
+    }
     fs.writeFile(
         `./${folderName}/${fileName}.md`,
-        JSON.stringify(contents),
+        contents,
         (err) => err ? console.error(err) : console.log('Commit logged!')
     );
 }
 
-// TODO: Create a function to initialize app
+//initialize
 function init() {
     inquirer.prompt(questions)
         .then((response) => {
@@ -88,5 +91,4 @@ function init() {
         });
 }
 
-// Function call to initialize app
 init();
