@@ -1,7 +1,17 @@
 //required packages
 const inquirer = require('inquirer');
 const fs = require('fs');
-let folderName = "output"
+const readmeStruct = [
+    "Description",
+    "Installation",
+    "Usage",
+    "License",
+    "Contributing",
+    "Tests",
+    "Questions"
+];
+const ignoredKeys = ["title", "github", "email"]
+let folderName = "output";
 
 //question array
 const questions = [
@@ -20,21 +30,21 @@ const questions = [
         message: 'What are the installation instructions?',
         name: 'installation',
     },
-    {
-        type: 'input',
-        message: 'What about usage information?',
-        name: 'usage',
-    },
-    {
-        type: 'input',
-        message: 'How about contribution guidelines?',
-        name: 'contributing',
-    },
-    {
-        type: 'input',
-        message: 'Are there any test instructions?',
-        name: 'tests',
-    },
+    // {
+    //     type: 'input',
+    //     message: 'What about usage information?',
+    //     name: 'usage',
+    // },
+    // {
+    //     type: 'input',
+    //     message: 'How about contribution guidelines?',
+    //     name: 'contributing',
+    // },
+    // {
+    //     type: 'input',
+    //     message: 'Are there any test instructions?',
+    //     name: 'tests',
+    // },
     // {
     //     type: 'input',
     //     message: 'Please choose a license from the following options: ',
@@ -54,7 +64,6 @@ const questions = [
 
 //create readme
 function writeToFile(fileName, data) {
-    console.log(data)
     let contents = "";
     //output directory
     try {
@@ -64,17 +73,22 @@ function writeToFile(fileName, data) {
     } catch (err) {
         console.error(err)
     }
-    for (const key in data) {
-        if (key == "title") {
-            contents += `# ${data[key].toUpperCase()}  \n`
-        } else {
-            contents += `## ${key.toUpperCase()}  \n ${data[key]}  \n\n`
+    let TOC = '# TABLE OF CONTENTS  \n';
+    for (const [i, value] of readmeStruct.entries()) {
+        TOC += `[${value}](#${value.toLowerCase().split(" ").join("")})  \n`;
+    }
+    console.log(data.title)
+    for (const keyName in data) {
+        if (ignoredKeys.indexOf(keyName) == -1) {
+            contents += `## ${keyName.toUpperCase()}  \n ${data[keyName]}  \n\n`;
         }
     }
+    console.log(contents)
     fs.writeFile(
         `./${folderName}/${fileName}.md`,
-        contents,
-        (err) => err ? console.error(err) : console.log('Commit logged!')
+        `# ${fileName.toUpperCase()}  \n` + TOC + contents,
+        (err) => err ? console.error(err) :
+            console.log("readme generated")
     );
 }
 
