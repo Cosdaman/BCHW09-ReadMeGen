@@ -10,11 +10,22 @@ const readmeStruct = [
     "Tests",
     "Questions"
 ];
-const ignoredKeys = ["title", "github", "email"]
+const ignoredKeys = ["title", "github", "email"];
+const questionKeys = ["github", "email"];
 let folderName = "output";
 
 //question array
 const questions = [
+    {
+        type: 'input',
+        message: "What's your Github username?",
+        name: 'github',
+    },
+    {
+        type: 'input',
+        message: "What's your email address?",
+        name: 'email',
+    },
     {
         type: 'input',
         message: 'What is your project title?',
@@ -50,21 +61,13 @@ const questions = [
     //     message: 'Please choose a license from the following options: ',
     //     name: 'license',
     // },
-    // {
-    //     type: 'input',
-    //     message: "What's your Github username?",
-    //     name: 'github',
-    // },
-    // {
-    //     type: 'input',
-    //     message: "What's your email address?",
-    //     name: 'email',
-    // },
 ];
 
 //create readme
 function writeToFile(fileName, data) {
     let contents = "";
+    let questionContent = `## QUESTIONS  \n\nFor any questions about this application feel free to reach out through the following:  \n`;
+
     //output directory
     try {
         if (!fs.existsSync(folderName)) {
@@ -77,16 +80,21 @@ function writeToFile(fileName, data) {
     for (const [i, value] of readmeStruct.entries()) {
         TOC += `[${value}](#${value.toLowerCase().split(" ").join("")})  \n`;
     }
-    console.log(data.title)
     for (const keyName in data) {
-        if (ignoredKeys.indexOf(keyName) == -1) {
-            contents += `## ${keyName.toUpperCase()}  \n ${data[keyName]}  \n\n`;
+        console.log(keyName)
+        if (!ignoredKeys.includes(keyName)) {
+            contents += `## ${keyName.toUpperCase()}  \n\n${data[keyName]}  \n\n`;
+        } else if (keyName == 'github') {
+            questionContent += `${keyName.toUpperCase()}: [${data.github}](https://github.com/${data.github})  \n`
+        } else if (keyName == 'email') {
+            questionContent += `${keyName.toUpperCase()}: [${data.email}](mailto:${data.email})  \n`;
         }
     }
-    console.log(contents)
+    console.log(data)
+
     fs.writeFile(
         `./${folderName}/${fileName}.md`,
-        `# ${fileName.toUpperCase()}  \n` + TOC + contents,
+        `# ${fileName.toUpperCase()}  \n${TOC}  \n\n${contents}  \n${questionContent}`,
         (err) => err ? console.error(err) :
             console.log("readme generated")
     );
@@ -100,8 +108,10 @@ function init() {
         })
         .catch((error) => {
             if (error.isTtyError) {
-                prompt("error", error)
-            } else { prompt("something else went wrong") }
+                console.log("error", error)
+            } else {
+                console.log("something else went wrong")
+            }
         });
 }
 
