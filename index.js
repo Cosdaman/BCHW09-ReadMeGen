@@ -32,31 +32,31 @@ const questions = [
         message: 'What is your project title?',
         name: 'title',
     },
-    // {
-    //     type: 'input',
-    //     message: 'What is your project description?',
-    //     name: 'description',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'What are the installation instructions?',
-    //     name: 'installation',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'What about usage information?',
-    //     name: 'usage',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'How about contribution guidelines?',
-    //     name: 'contributing',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'Are there any test instructions?',
-    //     name: 'tests',
-    // },
+    {
+        type: 'input',
+        message: 'What is your project description?',
+        name: 'description',
+    },
+    {
+        type: 'input',
+        message: 'What are the installation instructions?',
+        name: 'installation',
+    },
+    {
+        type: 'input',
+        message: 'What about usage information?',
+        name: 'usage',
+    },
+    {
+        type: 'input',
+        message: 'How about contribution guidelines?',
+        name: 'contributing',
+    },
+    {
+        type: 'input',
+        message: 'Are there any test instructions?',
+        name: 'tests',
+    },
     {
         type: 'list',
         message: 'Please choose a license from the following options: ',
@@ -80,7 +80,7 @@ function writeToFile(fileName, data) {
     } catch (err) {
         console.error(err)
     }
-    let TOC = '# TABLE OF CONTENTS  \n\n';
+    let TOC = '## TABLE OF CONTENTS  \n\n';
     //remove whitespaces from table of contents link references
     for (const [i, value] of readmeStruct.entries()) {
         TOC += `[${value}](#${value.toLowerCase().split(" ").join("")})  \n`;
@@ -91,9 +91,9 @@ function writeToFile(fileName, data) {
         } else if (keyName == 'license') {
             let licenseData = licenseGen(data);
             console.log(licenseData)
-            licenseContents += `## ${keyName.toUpperCase()}  \n\n`
+            licenseContents += `## [${keyName.toUpperCase()}](${licenseData.link})  \n\n`
             licenseContents += `${licenseData.content}`;
-            headerContent += ` ${licenseData.badge}  `;
+            headerContent += ` ${licenseData.badge}  \n\n`;
         } else if (keyName == 'github') {
             questionContent += `Github: [${data.github}](https://github.com/${data.github})  \n`
         } else if (keyName == 'email') {
