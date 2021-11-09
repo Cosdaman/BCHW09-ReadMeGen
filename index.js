@@ -7,9 +7,9 @@ const readmeStruct = [
     "Description",
     "Installation",
     "Usage",
-    "License",
     "Contributing",
     "Tests",
+    "License",
     "Questions"
 ];
 const ignoredKeys = ["title", "license", "github", "email"];
