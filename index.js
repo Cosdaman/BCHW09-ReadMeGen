@@ -32,31 +32,31 @@ const questions = [
         message: 'What is your project title?',
         name: 'title',
     },
-    {
-        type: 'input',
-        message: 'What is your project description?',
-        name: 'description',
-    },
-    {
-        type: 'input',
-        message: 'What are the installation instructions?',
-        name: 'installation',
-    },
-    {
-        type: 'input',
-        message: 'What about usage information?',
-        name: 'usage',
-    },
-    {
-        type: 'input',
-        message: 'How about contribution guidelines?',
-        name: 'contributing',
-    },
-    {
-        type: 'input',
-        message: 'Are there any test instructions?',
-        name: 'tests',
-    },
+    // {
+    //     type: 'input',
+    //     message: 'What is your project description?',
+    //     name: 'description',
+    // },
+    // {
+    //     type: 'input',
+    //     message: 'What are the installation instructions?',
+    //     name: 'installation',
+    // },
+    // {
+    //     type: 'input',
+    //     message: 'What about usage information?',
+    //     name: 'usage',
+    // },
+    // {
+    //     type: 'input',
+    //     message: 'How about contribution guidelines?',
+    //     name: 'contributing',
+    // },
+    // {
+    //     type: 'input',
+    //     message: 'Are there any test instructions?',
+    //     name: 'tests',
+    // },
     {
         type: 'list',
         message: 'Please choose a license from the following options: ',
@@ -83,13 +83,13 @@ function writeToFile(fileName, data) {
         TOC += `[${value}](#${value.toLowerCase().split(" ").join("")})  \n`;
     }
     for (const keyName in data) {
-        console.log(keyName)
         if (!ignoredKeys.includes(keyName)) {
             contents += `## ${keyName.toUpperCase()}  \n\n${data[keyName]}  \n\n`;
-        } else if (keyName == 'license') {  
-
+        } else if (keyName == 'license') {
+            let licenseData = licenseGen(data);
+            console.log(licenseData)
             licenseContents += `## ${keyName.toUpperCase()}  \n\n`
-            licenseContents += licenseGen(data);
+            licenseContents += "";
         } else if (keyName == 'github') {
             questionContent += `Github: [${data.github}](https://github.com/${data.github})  \n`
         } else if (keyName == 'email') {
