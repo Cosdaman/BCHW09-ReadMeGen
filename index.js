@@ -67,9 +67,11 @@ const questions = [
 
 //create readme
 function writeToFile(fileName, data) {
+    let headerContent = `# ${fileName.toUpperCase()}`;
     let contents = "";
     let questionContent = `## QUESTIONS  \n\nFor any questions about this application feel free to reach out through the following:  \n`;
     let licenseContents = "";
+
     //output directory
     try {
         if (!fs.existsSync(folderName)) {
@@ -79,6 +81,7 @@ function writeToFile(fileName, data) {
         console.error(err)
     }
     let TOC = '# TABLE OF CONTENTS  \n\n';
+    //remove whitespaces from table of contents link references
     for (const [i, value] of readmeStruct.entries()) {
         TOC += `[${value}](#${value.toLowerCase().split(" ").join("")})  \n`;
     }
@@ -89,7 +92,8 @@ function writeToFile(fileName, data) {
             let licenseData = licenseGen(data);
             console.log(licenseData)
             licenseContents += `## ${keyName.toUpperCase()}  \n\n`
-            licenseContents += "";
+            licenseContents += `${licenseData.content}`;
+            headerContent += ` ${licenseData.badge}  `;
         } else if (keyName == 'github') {
             questionContent += `Github: [${data.github}](https://github.com/${data.github})  \n`
         } else if (keyName == 'email') {
@@ -100,7 +104,7 @@ function writeToFile(fileName, data) {
 
     fs.writeFile(
         `./${folderName}/${fileName}.md`,
-        `# ${fileName.toUpperCase()}  \n${TOC}  \n\n${contents}  \n${licenseContents}  \n\n${questionContent}`,
+        `${headerContent}  \n${TOC}  \n\n${contents}  \n${licenseContents}  \n\n${questionContent}`,
         (err) => err ? console.error(err) :
             console.log("readme generated")
     );
