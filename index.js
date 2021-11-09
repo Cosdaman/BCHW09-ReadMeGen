@@ -1,6 +1,8 @@
 //required packages
 const inquirer = require('inquirer');
 const fs = require('fs');
+const licenseGen = require('./utils/generateMarkdown');
+//data arrays and vars
 const readmeStruct = [
     "Description",
     "Installation",
@@ -10,8 +12,7 @@ const readmeStruct = [
     "Tests",
     "Questions"
 ];
-const ignoredKeys = ["title", "github", "email"];
-const questionKeys = ["github", "email"];
+const ignoredKeys = ["title", "license", "github", "email"];
 let folderName = "output";
 
 //question array
@@ -41,33 +42,34 @@ const questions = [
         message: 'What are the installation instructions?',
         name: 'installation',
     },
-    // {
-    //     type: 'input',
-    //     message: 'What about usage information?',
-    //     name: 'usage',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'How about contribution guidelines?',
-    //     name: 'contributing',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'Are there any test instructions?',
-    //     name: 'tests',
-    // },
-    // {
-    //     type: 'input',
-    //     message: 'Please choose a license from the following options: ',
-    //     name: 'license',
-    // },
+    {
+        type: 'input',
+        message: 'What about usage information?',
+        name: 'usage',
+    },
+    {
+        type: 'input',
+        message: 'How about contribution guidelines?',
+        name: 'contributing',
+    },
+    {
+        type: 'input',
+        message: 'Are there any test instructions?',
+        name: 'tests',
+    },
+    {
+        type: 'list',
+        message: 'Please choose a license from the following options: ',
+        name: 'license',
+        choices: ["Apache 2.0 License", "GNU AGPL v3", "GNU GPL v3", "GNU LGPL v3", "Mozilla Public License 2.0", "The MIT License"],
+    },
 ];
 
 //create readme
 function writeToFile(fileName, data) {
     let contents = "";
     let questionContent = `## QUESTIONS  \n\nFor any questions about this application feel free to reach out through the following:  \n`;
-
+    let licenseContents = "";
     //output directory
     try {
         if (!fs.existsSync(folderName)) {
@@ -76,7 +78,7 @@ function writeToFile(fileName, data) {
     } catch (err) {
         console.error(err)
     }
-    let TOC = '# TABLE OF CONTENTS  \n';
+    let TOC = '# TABLE OF CONTENTS  \n\n';
     for (const [i, value] of readmeStruct.entries()) {
         TOC += `[${value}](#${value.toLowerCase().split(" ").join("")})  \n`;
     }
@@ -84,17 +86,21 @@ function writeToFile(fileName, data) {
         console.log(keyName)
         if (!ignoredKeys.includes(keyName)) {
             contents += `## ${keyName.toUpperCase()}  \n\n${data[keyName]}  \n\n`;
+        } else if (keyName == 'license') {  
+
+            licenseContents += `## ${keyName.toUpperCase()}  \n\n`
+            licenseContents += licenseGen(data);
         } else if (keyName == 'github') {
-            questionContent += `${keyName.toUpperCase()}: [${data.github}](https://github.com/${data.github})  \n`
+            questionContent += `Github: [${data.github}](https://github.com/${data.github})  \n`
         } else if (keyName == 'email') {
-            questionContent += `${keyName.toUpperCase()}: [${data.email}](mailto:${data.email})  \n`;
+            questionContent += `Email: [${data.email}](mailto:${data.email})  \n`;
         }
     }
     console.log(data)
 
     fs.writeFile(
         `./${folderName}/${fileName}.md`,
-        `# ${fileName.toUpperCase()}  \n${TOC}  \n\n${contents}  \n${questionContent}`,
+        `# ${fileName.toUpperCase()}  \n${TOC}  \n\n${contents}  \n${licenseContents}  \n\n${questionContent}`,
         (err) => err ? console.error(err) :
             console.log("readme generated")
     );
@@ -110,7 +116,7 @@ function init() {
             if (error.isTtyError) {
                 console.log("error", error)
             } else {
-                console.log("something else went wrong")
+                console.log("something else went wrong", error)
             }
         });
 }
