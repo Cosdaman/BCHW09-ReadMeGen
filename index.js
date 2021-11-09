@@ -90,7 +90,6 @@ function writeToFile(fileName, data) {
             contents += `## ${keyName.toUpperCase()}  \n\n${data[keyName]}  \n\n`;
         } else if (keyName == 'license') {
             let licenseData = licenseGen(data);
-            console.log(licenseData)
             licenseContents += `## [${keyName.toUpperCase()}](${licenseData.link})  \n\n`
             licenseContents += `${licenseData.content}`;
             headerContent += ` ${licenseData.badge}  \n\n`;
@@ -100,13 +99,10 @@ function writeToFile(fileName, data) {
             questionContent += `Email: [${data.email}](mailto:${data.email})  \n`;
         }
     }
-    console.log(data)
-
     fs.writeFile(
         `./${folderName}/${fileName}.md`,
         `${headerContent}  \n${TOC}  \n\n${contents}  \n${licenseContents}  \n\n${questionContent}`,
-        (err) => err ? console.error(err) :
-            console.log("readme generated")
+        (err) => err ? console.error(err) : console.log("readme generated")
     );
 }
 
