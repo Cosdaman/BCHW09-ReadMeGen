@@ -86,10 +86,10 @@ function writeToFile(fileName, data) {
         TOC += `[${value}](#${value.toLowerCase().split(" ").join("")})  \n`;
     }
     for (const keyName in data) {
+        let licenseData = licenseGen(data);
         if (!ignoredKeys.includes(keyName)) {
             contents += `## ${keyName.toUpperCase()}  \n\n${data[keyName]}  \n\n`;
         } else if (keyName == 'license') {
-            let licenseData = licenseGen(data);
             licenseContents += `## [${keyName.toUpperCase()}](${licenseData.link})  \n\n`
             licenseContents += `${licenseData.content}`;
             headerContent += ` ${licenseData.badge}  \n\n`;
