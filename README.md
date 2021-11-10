@@ -19,6 +19,10 @@ Feel free to reach out, you can reach me through:
 - Twitter: @Cosdaman  
 - Email: Cosdaguy@gmail.com  
 
+## Walkthrough Video
+- Youtube Link: https://www.youtube.com/watch?v=dbO1y_m_MTo
+- File: https://github.com/Cosdaman/BCHW09-ReadMeGen/blob/main/Walkthrough%20Video.webm
+
 ## Screenshot/s
 
 This is what the output looks like when viewed in Visual Studio Code.  
