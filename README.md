@@ -2,7 +2,7 @@
 
 ## Description  
 
-This application is a simple JavaScript application which generates a README file based on user input through the terminal.  
+This is a simple JavaScript application which generates a README file based on user input through the terminal.  
 
 ## Technologies Used  
 
